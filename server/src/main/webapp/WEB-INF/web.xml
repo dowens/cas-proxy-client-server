@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE web-app PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN" 
+"http://java.sun.com/dtd/web-app_2_3.dtd">
+<web-app>
+
+    <!-- security related filters and listeners  -->
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>
+            /WEB-INF/applicationContext-security.xml
+        </param-value>
+    </context-param>
+
+<!--    <filter>-->
+<!--       <filter-name>CAS Single Sign Out Filter</filter-name>-->
+<!--       <filter-class>org.jasig.cas.client.session.SingleSignOutFilter</filter-class>-->
+<!--    </filter>-->
+
+    <filter>
+      <filter-name>springSecurityFilterChain</filter-name>
+      <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+    </filter>
+
+<!--  <filter-mapping>-->
+<!--     <filter-name>CAS Single Sign Out Filter</filter-name>-->
+<!--     <url-pattern>/*</url-pattern>-->
+<!--  </filter-mapping>-->
+
+  <filter-mapping>
+    <filter-name>springSecurityFilterChain</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+
+<!--  <listener>-->
+<!--          <listener-class>org.jasig.cas.client.session.SingleSignOutHttpSessionListener</listener-class>-->
+<!--  </listener>-->
+    <!--
+      - Loads the root application context of this web app at startup.
+      - The application context is then available via
+      - WebApplicationContextUtils.getWebApplicationContext(servletContext).
+    -->
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+
+    <!--
+      - Publishes events for session creation and destruction through the application
+      - context. Optional unless concurrent session control is being used.
+    <listener>
+      <listener-class>org.springframework.security.ui.session.HttpSessionEventPublisher</listener-class>
+    </listener>
+    -->
+
+	<!-- servlets -->
+    <servlet>
+        <servlet-name>proxy</servlet-name>
+        <servlet-class>
+            org.springframework.web.servlet.DispatcherServlet
+        </servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <!-- url mapping -->
+    <servlet-mapping>
+        <servlet-name>proxy</servlet-name>
+        <url-pattern>/*</url-pattern>
+    </servlet-mapping>  
+    <session-config>
+        <session-timeout>60</session-timeout>
+    </session-config>
+</web-app>
+
